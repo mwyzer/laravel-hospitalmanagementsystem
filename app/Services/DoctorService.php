@@ -101,4 +101,45 @@ class DoctorService
             Storage::disk('public')->delete($relativePath);
         }
     }
+
+    public function filterBySpecialistAndHospital(int $hospitalId, int $specialistId)
+    {
+        // Filter doctors by specialization and hospital
+        return $this->doctorRepository->filterBySpecialistAndHospital($hospitalId, $specialistId);
+    }
+
+    public function getAvailableSlots(int $doctorId)
+    {
+        // Logic to get available slots for a doctor on a specific date
+        $doctor =  $this->doctorRepository->getById($doctorId, ['id']);
+
+        $dates = collect([
+            now()->addDays(1)->startOfDay(),
+            now()->addDays(2)->startOfDay(),
+            now()->addDays(3)->startOfDay(),
+        ]);
+
+        $timeSlots = collect([
+            '10:00', '11:00', '13:00',
+            '14:00', '15:00', '16:00', '17:00'
+        ]);
+
+        $availability = [];
+
+        foreach ($dates as $date) {
+            $dateStr = $date->toDateString();
+            $availability[$dateStr] = [];
+            
+            foreach ($timeSlots as $time) {
+                $isTaken = $doctor->bookingTransactions()
+                ->whereDate('started_at', $dateStr)
+                ->whereTime('started_at', $time)
+                ->exists();
+
+                if (!$isTaken) {
+                    $availability[$dateStr] = $time;
+                }
+            }
+        }
+    }
 }   

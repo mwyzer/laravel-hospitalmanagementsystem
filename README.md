@@ -49,6 +49,7 @@ A Laravel-based application for managing patient examination records. Doctors ca
 
 ---
 
+<!--
 ## 🗂️ Database Structure
 
 ### 🔧 SQL File
@@ -85,4 +86,4 @@ These users are created automatically via seeder (`DatabaseSeeder.php`).
 
 -   �튺 Doctors can manage patient medical records.
 -   👥 Admin can manage users (doctors & patients).
--   🏥 Records include patient name, examination date, diagnosis, prescription, and additional notes.
+-   🏥 Records include patient name, examination date, diagnosis, prescription, and additional notes. -->
