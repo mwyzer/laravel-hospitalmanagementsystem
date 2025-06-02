@@ -9,7 +9,7 @@ class DoctorRepository
     {
         // Logic to retrieve all doctors with specified fields
         return Doctor::select($fields)
-            ->with(['specialization', 'hospital'])
+            ->with(['specialist', 'hospital'])
             ->latest()
             ->paginate(10);
     }
@@ -18,7 +18,7 @@ class DoctorRepository
     {
         // Logic to retrieve a doctor by ID with specified fields
         return Doctor::select($fields)
-            ->with(['specialization', 'hospital'])
+            ->with(['specialist', 'hospital', 'bookingTransactions.user'])
             ->findOrFail($id);
     }
 
@@ -47,8 +47,7 @@ class DoctorRepository
         // Logic to filter doctors by specialization and hospital
         return Doctor::with('specialist','hospital')
             ->where('hospital_id', $hospitalId)
-            ->where('specialization_id', $specialistId)
-            ->with(['specialization', 'hospital'])
+            ->where('specialist_id', $specialistId)
             ->get();
     }
 

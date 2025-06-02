@@ -48,6 +48,18 @@ class HospitalService
         return $this->hospitalRepository->update($id, $data);
     }
 
+    public function delete(int $id)
+    {
+        $fields = ['*'];
+        $hospital = $this->hospitalRepository->getById($id, $fields);
+
+        if (!empty($hospital->photo)) {
+            $this->deletePhoto($hospital->photo);
+        }
+
+        return $this->hospitalRepository->delete($id);
+    }
+
     public function uploadPhoto(UploadedFile $photo)
     {
         return $photo->store('hospitals', 'public');

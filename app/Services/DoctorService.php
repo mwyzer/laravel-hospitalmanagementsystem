@@ -37,8 +37,8 @@ class DoctorService
     {
         //Check if specialization and hospital are provided
         if (!$this->hospitalSpecialistRepository->existsForHospitalAndSpecialist(
-            $data['hospital_id'] ?? null,
-            $data['specialization_id'] ?? null
+            $data['hospital_id'],
+            $data['specialization_id']
         )) {
             throw ValidationException::withMessages([
                 'specialist_id' => ['Selected specialist does not exist for the selected hospital.'],
@@ -83,6 +83,12 @@ class DoctorService
 
     public function delete(int $id)
     {
+        $doctor = $this->doctorRepository->getById($id, ['*']);
+
+        if ($doctor->photo) {
+            // Delete the doctor's photo if it exists
+            $this->deletePhoto($doctor->photo);
+        }
         // Delete a doctor by ID
         return $this->doctorRepository->delete($id);
     }
