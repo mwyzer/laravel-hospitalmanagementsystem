@@ -33,7 +33,7 @@ class BookingTransactionService
 
     public function updateStatus(int $id, string $status)
     {
-       if (!in_array($status, ['Approved', 'Rejected', 'Waiting'])) {
+       if (!in_array($status, ['Approved', 'Rejected', 'Pending'])) {
             throw ValidationException::withMessages([
                 'status' => 'Invalid status provided.'
             ]);
@@ -64,7 +64,7 @@ class BookingTransactionService
         }
 
         $doctor = $this->doctorRepository->getById($data['doctor_id'], ['*']);
-        
+
         $price = $doctor->specialist->price;
         $tax = (int) round($price * 0.11);
         $grand = $price + $tax;

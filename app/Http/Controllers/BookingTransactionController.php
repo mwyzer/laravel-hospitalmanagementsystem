@@ -33,4 +33,18 @@ class BookingTransactionController extends Controller
         }
     }
 
+    public function updateStatus(Request $request, int $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:Approved,Rejected,Pending',
+        ]);
+
+        try {
+            $transaction = $this->bookingTransactionService->updateStatus($id, $validated['status']);
+            return response()->json(new TransactionResource($transaction));
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Transaction not found'], 404);
+        }
+    }
+
 }

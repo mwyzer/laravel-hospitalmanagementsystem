@@ -14,7 +14,7 @@ class SpecialistController extends Controller
     //
     private $specialistService;
 
-    public  function __construct($specialistService)
+    public  function __construct(SpecialistService $specialistService)
     {
         $this->specialistService = $specialistService;
     }
@@ -22,7 +22,7 @@ class SpecialistController extends Controller
     public function index()
     {
         $fields = ['id', 'name', 'photo', 'price'];
-        $specialists = $this->specialistService->getAllSpecialists($fields);
+        $specialists = $this->specialistService->getAll($fields);
         return response()->json(SpecialistResource::collection($specialists), 200);
     }
 
@@ -30,7 +30,7 @@ class SpecialistController extends Controller
     {
         try {
             $fields = ['*'];
-            $specialist = $this->specialistService->getSpecialistById($id, $fields);
+            $specialist = $this->specialistService->getById($id, $fields);
             return response()->json(new SpecialistResource($specialist), 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Specialist not found'], 404);
@@ -40,7 +40,7 @@ class SpecialistController extends Controller
     public function store(SpecialistRequest $request)
     {
         $data = $request->validated();
-        $specialist = $this->specialistService->createSpecialist($data);
+        $specialist = $this->specialistService->create($data);
         return response()->json(new SpecialistResource($specialist), 201);
     }
 
