@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Doctor extends Model
 {
@@ -38,6 +40,6 @@ class Doctor extends Model
             return null;
         }
 
-        return url('Storage::url($value)');
+        return url(Storage::url($value));
     }
 }

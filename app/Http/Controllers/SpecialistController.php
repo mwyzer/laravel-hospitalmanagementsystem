@@ -8,6 +8,7 @@ use App\Models\Specialist;
 use App\Services\SpecialistService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SpecialistController extends Controller
 {
@@ -21,9 +22,14 @@ class SpecialistController extends Controller
 
     public function index()
     {
-        $fields = ['id', 'name', 'photo', 'price'];
-        $specialists = $this->specialistService->getAll($fields);
-        return response()->json(SpecialistResource::collection($specialists), 200);
+        try {
+            $fields = ['id', 'name', 'photo', 'price'];
+            $specialists = $this->specialistService->getAll($fields);
+            return response()->json(SpecialistResource::collection($specialists), 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
     }
 
     public function show(int $id)

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\SpecialistRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class SpecialistService
 {
@@ -16,7 +17,12 @@ class SpecialistService
 
     public function getAll(array $fields)
     {
-        return $this->specialistRepository->getAll($fields);
+        try {
+            return $this->specialistRepository->getAll($fields);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
     }
 
     public function getById(int $id, array $fields)
@@ -47,7 +53,7 @@ class SpecialistService
         }
 
         return $this->specialistRepository->update($id, $data);
-    } 
+    }
 
     private function uploadPhoto(UploadedFile $photo):string
     {
